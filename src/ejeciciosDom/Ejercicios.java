@@ -35,6 +35,40 @@ public class Ejercicios {
 		}
 	}
 	
+	
+	public void mostrarPelisDirector(NodeList pelis) {
+		NodeList hijos;
+		String nodeName;
+		
+		String titulo = null, nombre = null, apellido = null;
+		
+		for(int i = 0; i < pelis.getLength(); i++) {
+			hijos = pelis.item(i).getChildNodes();
+			for(int j = 0; j < hijos.getLength(); j++) {
+				nodeName = hijos.item(j).getNodeName();
+				if(nodeName.equals("titulo")) {
+					titulo = hijos.item(j).getFirstChild().getNodeValue();
+				}
+				if(nodeName.equals("director")) {
+					hijos = hijos.item(j).getChildNodes();
+					for(int k = 0; k < hijos.getLength(); k++) {
+						nodeName = hijos.item(k).getNodeName();
+						if(nodeName.equals("nombre")) {
+							nombre = hijos.item(k).getFirstChild().getNodeValue();
+						}
+						if(nodeName.equals("apellido")) {
+							apellido = hijos.item(k).getFirstChild().getNodeValue();
+						}
+					}
+				}
+			}
+			
+			System.out.printf("Título: %s\nDirector: %s %s\n\n",titulo, nombre, apellido);
+			
+		}
+	}
+	
+	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
 		
@@ -44,9 +78,17 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		ejer.mostrarTitulos(pelis);
+		int ejercicio = 4;
 		
 		
+		switch(ejercicio) {
+			case 3:
+				ejer.mostrarTitulos(pelis);
+				break;
+			case 4:
+				ejer.mostrarPelisDirector(pelis);
+				break;
+		}
 	}
 
 }

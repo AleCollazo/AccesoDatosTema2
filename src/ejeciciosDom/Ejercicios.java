@@ -1,9 +1,12 @@
 package ejeciciosDom;
 
+import java.util.ArrayList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -108,6 +111,40 @@ public class Ejercicios {
 	}
 	
 	
+	public void contarGeneros(NodeList pelis) {
+		NamedNodeMap attribs;
+		ArrayList<String> generos = new ArrayList<>();
+		boolean existe;
+		
+		for(int i = 0; i < pelis.getLength(); i++) {
+			attribs = pelis.item(i).getAttributes();
+			for(int j = 0; j < attribs.getLength(); j++) {
+				if(attribs.item(j).getNodeName().equals("genero")) {
+					if(generos.isEmpty()) {
+						generos.add(attribs.item(j).getNodeValue());
+					}
+					else {
+						existe = false;
+						for(int k = 0; k < generos.size(); k++) {
+							if(attribs.item(j).getNodeValue().equals(generos.get(k))) {
+								existe = true;
+							}
+						}
+						if(!existe) generos.add(attribs.item(j).getNodeValue());
+					}
+				}
+			}
+		}
+		
+		System.out.printf("¿Cuántos géneros diferentes de películas hay?\n%d\n\n", generos.size());
+		
+		System.out.println("¿Cuáles son?");
+		for(int i = 0; i < generos.size(); i++) {
+			System.out.println(generos.get(i));
+		}
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
@@ -118,7 +155,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 5;
+		int ejercicio = 6;
 		
 		
 		switch(ejercicio) {
@@ -133,6 +170,10 @@ public class Ejercicios {
 				break;
 			case 5:
 				ejer.masNDirectores(1, pelis);
+				break;
+			case 6:
+				ejer.contarGeneros(pelis);
+				break;
 		}
 	}
 

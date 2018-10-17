@@ -4,6 +4,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Ejercicios {
@@ -69,6 +70,20 @@ public class Ejercicios {
 	}
 	
 	
+	public void mostrarArbol(Node node, String tab) {
+		System.out.printf("%s%d %s\n",tab,node.getNodeType(),node.getNodeName());
+		
+		NodeList hijos = node.getChildNodes();
+		
+		tab += "\t";
+		
+		for(int i = 0; i < hijos.getLength(); i++) {
+			mostrarArbol(hijos.item(i),tab);
+		}
+	}
+	
+	
+	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
 		
@@ -78,7 +93,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 4;
+		int ejercicio = 5;
 		
 		
 		switch(ejercicio) {
@@ -87,6 +102,9 @@ public class Ejercicios {
 				break;
 			case 4:
 				ejer.mostrarPelisDirector(pelis);
+				break;
+			case 5:
+				ejer.mostrarArbol(doc.getFirstChild(),"");
 				break;
 		}
 	}

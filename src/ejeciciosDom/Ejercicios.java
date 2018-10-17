@@ -6,6 +6,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -145,6 +146,29 @@ public class Ejercicios {
 	}
 	
 	
+	public void añadirAtributo(NodeList pelis, String atributo, String valorAtrib) {
+		NamedNodeMap atributos;
+		boolean existe;
+		
+		for(int i = 0; i < pelis.getLength(); i++) {
+			atributos = pelis.item(i).getAttributes();
+			existe = false;
+			
+			System.out.println(atributo.length());
+			
+			for(int j = 0; j < atributos.getLength(); j++) {
+				System.out.println(atributos.item(j).getNodeName());
+				if(atributos.item(j).getNodeName().equals(atributo)) {
+					existe = true;
+				}
+			}
+			if(!existe) { 
+				((Element) pelis.item(i)).setAttribute(atributo, valorAtrib);
+			}
+		}
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
@@ -155,7 +179,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 6;
+		int ejercicio = 4;
 		
 		
 		switch(ejercicio) {
@@ -173,6 +197,9 @@ public class Ejercicios {
 				break;
 			case 6:
 				ejer.contarGeneros(pelis);
+				break;
+			case 7:
+				ejer.añadirAtributo(pelis, "Prueba", "Valor de prueba");
 				break;
 		}
 	}

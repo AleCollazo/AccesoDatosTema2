@@ -39,6 +39,7 @@ public class Ejercicios {
 	
 	public void mostrarPelisDirector(NodeList pelis) {
 		NodeList hijos;
+		NodeList nietos;
 		String nodeName;
 		
 		String titulo = null, nombre = null, apellido = null;
@@ -49,23 +50,24 @@ public class Ejercicios {
 				nodeName = hijos.item(j).getNodeName();
 				if(nodeName.equals("titulo")) {
 					titulo = hijos.item(j).getFirstChild().getNodeValue();
+					System.out.printf("Título: %s\n",titulo);
 				}
 				if(nodeName.equals("director")) {
-					hijos = hijos.item(j).getChildNodes();
-					for(int k = 0; k < hijos.getLength(); k++) {
-						nodeName = hijos.item(k).getNodeName();
+					nietos = hijos.item(j).getChildNodes();
+					for(int k = 0; k < nietos.getLength(); k++) {
+						nodeName = nietos.item(k).getNodeName();
 						if(nodeName.equals("nombre")) {
-							nombre = hijos.item(k).getFirstChild().getNodeValue();
+							nombre = nietos.item(k).getFirstChild().getNodeValue();
+							System.out.printf("Director: %s", nombre);
 						}
 						if(nodeName.equals("apellido")) {
-							apellido = hijos.item(k).getFirstChild().getNodeValue();
+							apellido = nietos.item(k).getFirstChild().getNodeValue();
+							System.out.printf(" %s\n", apellido);
 						}
 					}
 				}
 			}
-			
-			System.out.printf("Título: %s\nDirector: %s %s\n\n",titulo, nombre, apellido);
-			
+			System.out.println();
 		}
 	}
 	
@@ -93,7 +95,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 5;
+		int ejercicio = 4;
 		
 		
 		switch(ejercicio) {

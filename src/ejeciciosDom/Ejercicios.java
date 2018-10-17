@@ -85,6 +85,29 @@ public class Ejercicios {
 	}
 	
 	
+	public void masNDirectores(int n, NodeList pelis) {
+		int count;
+		String titulo="";
+		NodeList hijos;
+		
+		for(int i = 0; i < pelis.getLength(); i++) {
+			hijos  = pelis.item(i).getChildNodes();
+			count = 0;
+			for(int j = 0; j < hijos.getLength(); j++) {
+				if(hijos.item(j).getNodeName().equals("titulo")) {
+					titulo = hijos.item(j).getFirstChild().getNodeValue();
+				}
+				if(hijos.item(j).getNodeName().equals("director")) {
+					count++;
+					if(count > n) {
+						System.out.println(titulo);
+					}
+				}
+			}
+		}
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
@@ -95,19 +118,21 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 4;
+		int ejercicio = 5;
 		
 		
 		switch(ejercicio) {
-			case 3:
+			case 2:
 				ejer.mostrarTitulos(pelis);
 				break;
-			case 4:
+			case 3:
 				ejer.mostrarPelisDirector(pelis);
 				break;
-			case 5:
+			case 4:
 				ejer.mostrarArbol(doc.getFirstChild(),"");
 				break;
+			case 5:
+				ejer.masNDirectores(1, pelis);
 		}
 	}
 

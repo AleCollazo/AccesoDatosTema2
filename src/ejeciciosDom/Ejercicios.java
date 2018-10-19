@@ -153,7 +153,8 @@ public class Ejercicios {
 		
 		try {	
 			for(int i = 0; i < pelis.getLength(); i++) {
-				if(pelis.item(i).getFirstChild().getNodeName().equals(titulo)) {
+				System.out.println(pelis.item(i).getFirstChild().getNodeValue()); //TODO Coger el título de los hijos
+				if(pelis.item(i).getFirstChild().getNodeValue().equals(titulo)) {
 					if(!((Element)pelis.item(i)).hasAttribute(atributo)) {
 						((Element)pelis.item(i)).setAttribute(atributo, valorAtrib);
 						modificado = true;
@@ -173,7 +174,8 @@ public class Ejercicios {
 		
 		try {
 			for(int i = 0; i < pelis.getLength(); i++) {
-				if(pelis.item(i).getFirstChild().getNodeName().equals(titulo)) {
+				System.out.println(pelis.item(i).getFirstChild().getNodeValue());
+				if(pelis.item(i).getFirstChild().getNodeValue().equals(titulo)) {
 					if(((Element)pelis.item(i)).hasAttribute(atributo)) {
 						pelis.item(i).getParentNode().removeChild(pelis.item(i));
 						modificado = true;
@@ -199,7 +201,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 4;
+		int ejercicio = 7;
 		
 		
 		switch(ejercicio) {
@@ -220,7 +222,7 @@ public class Ejercicios {
 				break;
 			case 7:
 				System.out.println(ejer.añadirAtributo(pelis, "Dune", "Prueba", "Valor de prueba"));
-				System.out.println(ejer.eliminarPelicula(pelis, "Dune", "Prueba"));
+				System.out.println(ejer.eliminarPelicula(pelis, "Dune", "año"));
 				break;
 		}
 	}

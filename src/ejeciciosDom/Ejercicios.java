@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -146,27 +147,46 @@ public class Ejercicios {
 	}
 	
 	
-	public void añadirAtributo(NodeList pelis, String atributo, String valorAtrib) {
-		NamedNodeMap atributos;
-		boolean existe;
+	
+	public boolean añadirAtributo(NodeList pelis, String titulo, String atributo, String valorAtrib) {
+		boolean modificado = false;
 		
-		for(int i = 0; i < pelis.getLength(); i++) {
-			atributos = pelis.item(i).getAttributes();
-			existe = false;
-			
-			System.out.println(atributo.length());
-			
-			for(int j = 0; j < atributos.getLength(); j++) {
-				System.out.println(atributos.item(j).getNodeName());
-				if(atributos.item(j).getNodeName().equals(atributo)) {
-					existe = true;
+		try {	
+			for(int i = 0; i < pelis.getLength(); i++) {
+				if(pelis.item(i).getFirstChild().getNodeName().equals(titulo)) {
+					if(!((Element)pelis.item(i)).hasAttribute(atributo)) {
+						((Element)pelis.item(i)).setAttribute(atributo, valorAtrib);
+						modificado = true;
+					}
 				}
 			}
-			if(!existe) { 
-				((Element) pelis.item(i)).setAttribute(atributo, valorAtrib);
+			return modificado;
+		} catch(DOMException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
+		
+	}
+	
+	public boolean eliminarPelicula(NodeList pelis, String titulo, String atributo) {
+		boolean modificado = false;
+		
+		try {
+			for(int i = 0; i < pelis.getLength(); i++) {
+				if(pelis.item(i).getFirstChild().getNodeName().equals(titulo)) {
+					if(((Element)pelis.item(i)).hasAttribute(atributo)) {
+						pelis.item(i).getParentNode().removeChild(pelis.item(i));
+						modificado = true;
+					}
+				}
 			}
+			return modificado;
+		} catch(DOMException e) {
+			System.err.println(e.getMessage());
+			return false;
 		}
 	}
+	
 	
 	
 	
@@ -199,7 +219,8 @@ public class Ejercicios {
 				ejer.contarGeneros(pelis);
 				break;
 			case 7:
-				ejer.añadirAtributo(pelis, "Prueba", "Valor de prueba");
+				System.out.println(ejer.añadirAtributo(pelis, "Dune", "Prueba", "Valor de prueba"));
+				System.out.println(ejer.eliminarPelicula(pelis, "Dune", "Prueba"));
 				break;
 		}
 	}

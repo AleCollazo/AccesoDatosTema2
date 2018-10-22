@@ -1,5 +1,7 @@
 package ejeciciosDom;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,6 +13,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 
 public class Ejercicios {
 	public Document crearArbol(String ruta) {
@@ -190,18 +197,77 @@ public class Ejercicios {
 	}
 	
 	
+	public boolean añadirPeli(Document doc, String titulo, String dirNombre, String dirApellido, String año, String genero, String idioma) {
+		try {
+			Element nodoPelicula = doc.createElement("Pelicula");
+			
+			nodoPelicula.setAttribute("genero", genero);
+			
+			// Titulo
+			Element nodoTitulo = doc.createElement("Titulo");
+			Text textTitulo = doc.createTextNode(titulo);
+			nodoTitulo.appendChild(textTitulo);
+			nodoPelicula.appendChild(nodoTitulo);
+			
+			// Director
+			Element nodoDirector = doc.createElement("Director");
+			Element nodoNombre = doc.createElement("Nombre");
+			Element nodoApellido = doc.createElement("Apellido");
+			Text textNombre = doc.createTextNode(dirNombre);
+			Text textApellido = doc.createTextNode(dirApellido);
+			nodoNombre.appendChild(textNombre);
+			nodoApellido.appendChild(textApellido);
+			
+			nodoDirector.appendChild(nodoNombre);
+			nodoDirector.appendChild(nodoApellido);
+			nodoPelicula.appendChild(nodoDirector);
+			
+			// Atributos
+			nodoPelicula.setAttribute("año", año);
+			nodoPelicula.setAttribute("genero", genero);
+			nodoPelicula.setAttribute("idioma", idioma);
+			
+			Node raiz = doc.getFirstChild();
+			raiz.appendChild(nodoPelicula);
+			
+			return true;
+		}
+		catch(DOMException e) {
+			return false;
+		}
+	}
+	
+	
+	public void grabarDOM(Document doc, String ficheroSalida) throws
+	ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException{
+		DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+		DOMImplementationLS ls = (DOMImplementationLS) registry.getDOMImplementation("XML 3.0 LS 3.0");
+		
+		LSOutput output = ls.createLSOutput();
+		output.setEncoding("UTF-8");
+		
+		output.setByteStream(new FileOutputStream(ficheroSalida));
+		
+		LSSerializer serializer = ls.createLSSerializer();
+		
+		serializer.setNewLine("\r\n");
+		serializer.getDomConfig().setParameter("format-pretty-print", true);
+		
+		serializer.write(doc, output);
+	}
 	
 	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
 		
 		String ruta = System.getProperty("user.home")+"\\Documents\\peliculas.xml";
+		String rutaSalida = System.getProperty("user.home")+"\\Documents\\peliculasSalida.xml";
 		
 		Document doc = ejer.crearArbol(ruta);
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 7;
+		int ejercicio = 8;
 		
 		
 		switch(ejercicio) {
@@ -223,6 +289,17 @@ public class Ejercicios {
 			case 7:
 				System.out.println(ejer.añadirAtributo(pelis, "Dune", "Prueba", "Valor de prueba"));
 				System.out.println(ejer.eliminarPelicula(pelis, "Dune", "año"));
+				break;
+			case 8:
+				ejer.añadirPeli(doc, "Depredador", "Jhon", "Tiernan", "1987", "acción", "en");
+				
+				try {
+					ejer.grabarDOM(doc, rutaSalida);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 		}
 	}

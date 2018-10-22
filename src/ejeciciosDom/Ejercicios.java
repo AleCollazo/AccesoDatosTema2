@@ -301,6 +301,43 @@ public class Ejercicios {
 					e.printStackTrace();
 				}
 				break;
+			case 9:
+				String nombre = "Larry";
+				String apellido = "Wachowski";
+				String nombreNuevo = "Lana";
+				
+				boolean flag = false;
+				
+				NodeList directores = doc.getElementsByTagName("director");
+				
+				for(int i = 0; i < directores.getLength(); i++) {
+					NodeList hijos = directores.item(i).getChildNodes();
+					for(int j = 0; j < hijos.getLength(); j++) {
+						if(hijos.item(j).getNodeName().equals("nombre")) {
+							if(hijos.item(j).getFirstChild().equals(nombre)) {
+								flag = true;
+							}
+						}
+						if(hijos.item(j).getNodeName().equals("apellido")) {
+							if(hijos.item(j).getFirstChild().equals(apellido)) {
+								flag = true;
+							}
+						}
+						if(flag) {
+							((Node)((Element) hijos.item(j)).getElementsByTagName("nombre")).appendChild(doc.createTextNode(nombreNuevo));
+						}
+					}
+				}
+				
+				try {
+					ejer.grabarDOM(doc, rutaSalida);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				break;
 		}
 	}
 

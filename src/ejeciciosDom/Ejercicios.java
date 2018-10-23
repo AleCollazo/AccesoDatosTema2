@@ -24,7 +24,7 @@ public class Ejercicios {
 		Document doc = null;
 		try {
 			DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
-			factoria.setIgnoringComments(true);
+			factoria.setIgnoringComments(false);
 			DocumentBuilder builder = factoria.newDocumentBuilder();
 			doc = builder.parse(ruta);
 		} catch(Exception e) {
@@ -105,6 +105,7 @@ public class Ejercicios {
 		for(int i = 0; i < pelis.getLength(); i++) {
 			hijos  = pelis.item(i).getChildNodes();
 			count = 0;
+			 titulo="";
 			for(int j = 0; j < hijos.getLength(); j++) {
 				if(hijos.item(j).getNodeName().equals("titulo")) {
 					titulo = hijos.item(j).getFirstChild().getNodeValue();
@@ -120,7 +121,7 @@ public class Ejercicios {
 	}
 	
 	
-	public void contarGeneros(NodeList pelis) {
+	public ArrayList<String> contarGeneros(NodeList pelis) {
 		NamedNodeMap attribs;
 		ArrayList<String> generos = new ArrayList<>();
 		boolean existe;
@@ -129,28 +130,14 @@ public class Ejercicios {
 			attribs = pelis.item(i).getAttributes();
 			for(int j = 0; j < attribs.getLength(); j++) {
 				if(attribs.item(j).getNodeName().equals("genero")) {
-					if(generos.isEmpty()) {
+					if(!generos.contains(attribs.item(j).getNodeValue())) {
 						generos.add(attribs.item(j).getNodeValue());
-					}
-					else {
-						existe = false;
-						for(int k = 0; k < generos.size(); k++) {
-							if(attribs.item(j).getNodeValue().equals(generos.get(k))) {
-								existe = true;
-							}
-						}
-						if(!existe) generos.add(attribs.item(j).getNodeValue());
 					}
 				}
 			}
 		}
 		
-		System.out.printf("¿Cuántos géneros diferentes de películas hay?\n%d\n\n", generos.size());
-		
-		System.out.println("¿Cuáles son?");
-		for(int i = 0; i < generos.size(); i++) {
-			System.out.println(generos.get(i));
-		}
+		return generos;
 	}
 	
 	
@@ -267,7 +254,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 8;
+		int ejercicio = 9;
 		
 		
 		switch(ejercicio) {
@@ -284,7 +271,14 @@ public class Ejercicios {
 				ejer.masNDirectores(1, pelis);
 				break;
 			case 6:
-				ejer.contarGeneros(pelis);
+				ArrayList<String> generos = ejer.contarGeneros(pelis);
+				
+				System.out.printf("¿Cuántos géneros diferentes de películas hay?\n%d\n\n", generos.size());
+				
+				System.out.println("¿Cuáles son?");
+				for(int i = 0; i < generos.size(); i++) {
+					System.out.println(generos.get(i));
+				}
 				break;
 			case 7:
 				System.out.println(ejer.añadirAtributo(pelis, "Dune", "Prueba", "Valor de prueba"));
@@ -297,7 +291,7 @@ public class Ejercicios {
 					ejer.grabarDOM(doc, rutaSalida);
 				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 						| FileNotFoundException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				break;
@@ -306,7 +300,8 @@ public class Ejercicios {
 				String apellido = "Wachowski";
 				String nombreNuevo = "Lana";
 				
-				boolean flag = false;
+				boolean flagNom = false;
+				boolean flagApe = false;
 				
 				NodeList directores = doc.getElementsByTagName("director");
 				
@@ -314,18 +309,33 @@ public class Ejercicios {
 					NodeList hijos = directores.item(i).getChildNodes();
 					for(int j = 0; j < hijos.getLength(); j++) {
 						if(hijos.item(j).getNodeName().equals("nombre")) {
-							if(hijos.item(j).getFirstChild().equals(nombre)) {
-								flag = true;
+							System.out.println("Nombre: "+hijos.item(j).getFirstChild().getNodeValue());
+							if(hijos.item(j).getFirstChild().getNodeValue().equals(nombre)) {
+								flagNom = true;
 							}
+							else flagNom = false;
 						}
+						else flagNom = false;
 						if(hijos.item(j).getNodeName().equals("apellido")) {
-							if(hijos.item(j).getFirstChild().equals(apellido)) {
-								flag = true;
+							System.out.println("Nombre: "+hijos.item(j).getFirstChild().getNodeValue());
+							if(hijos.item(j).getFirstChild().getNodeValue().equals(apellido)) {
+								flagApe = true;
 							}
+							else flagApe = false;
 						}
-						if(flag) {
-							((Node)((Element) hijos.item(j)).getElementsByTagName("nombre")).appendChild(doc.createTextNode(nombreNuevo));
+						else flagApe = false;
+						
+						
+						System.out.printf("FlagNom: %b - FlagApe: %b\n %b\n\n",flagNom, flagApe, flagNom && flagApe);
+						if(flagNom && flagApe) {
+							NodeList nodeListNombres = ((Element) directores.item(i)).getElementsByTagName("nombre");
+							
+							System.out.println(nodeListNombres.getLength());
+							
+							nodeListNombres.item(0).replaceChild(doc.createTextNode(nombreNuevo),nodeListNombres.item(0).getFirstChild());
+							System.out.println("Se sustituyó");
 						}
+						
 					}
 				}
 				

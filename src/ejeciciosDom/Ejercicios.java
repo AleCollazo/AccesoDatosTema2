@@ -156,6 +156,7 @@ public class Ejercicios {
 	
 	
 	public Document añadirAtributo(String titulo, String atributo, String valorAtrib, Document doc) {
+		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
 		NodeList hijosPelis;
 		
@@ -167,7 +168,6 @@ public class Ejercicios {
 						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
 							if(!((Element)pelis.item(i)).hasAttribute(atributo)) {
 								((Element)pelis.item(i)).setAttribute(atributo, valorAtrib);
-								modificado = true;
 							}
 						}
 					}
@@ -179,8 +179,8 @@ public class Ejercicios {
 		return doc;
 	}
 	
-	public boolean eliminarPelicula(String titulo, String atributo, Document doc) {
-		boolean modificado = false;
+	public Document eliminarPelicula(String titulo, String atributo, Document doc) {
+		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
 		NodeList hijosPelis;
 		
@@ -192,21 +192,20 @@ public class Ejercicios {
 						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
 							if(((Element)pelis.item(i)).hasAttribute(atributo)) {
 								pelis.item(i).getParentNode().removeChild(pelis.item(i));
-								modificado = true;
 							}
 						}
 					}
 				}
 			}
-			return modificado;
 		} catch(DOMException e) {
 			System.err.println(e.getMessage());
-			return false;
 		}
+		
+		return doc;
 	}
 	
-	public boolean eliminarPelicula(String titulo, Document doc) {
-		boolean modificado = false;
+	public Document eliminarPelicula(String titulo, Document doc) {
+		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
 		NodeList hijosPelis;
 		
@@ -217,16 +216,15 @@ public class Ejercicios {
 					if(hijosPelis.item(j).getNodeName().equals("titulo")) {
 						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
 							pelis.item(i).getParentNode().removeChild(pelis.item(i));
-							modificado = true;
 						}
 					}
 				}
 			}
-			return modificado;
 		} catch(DOMException e) {
 			System.err.println(e.getMessage());
-			return false;
 		}
+		
+		return doc;
 	}
 	
 	public boolean añadirPeli(Document doc, String titulo, String dirNombre, String dirApellido, String año, String genero, String idioma) {
@@ -416,7 +414,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 7;
+		int ejercicio = 11;
 		
 		
 		switch(ejercicio) {
@@ -443,8 +441,8 @@ public class Ejercicios {
 				}
 				break;
 			case 7:
-				System.out.println(ejer.añadirAtributo(pelis, "Dune", "Prueba", "Valor de prueba"));
-				System.out.println(ejer.eliminarPelicula(pelis, "Dune", "año"));
+				doc = ejer.añadirAtributo("Dune", "Prueba", "Valor de prueba", doc);
+				doc = ejer.eliminarPelicula("Alien", "año", doc);
 				
 				try {
 					ejer.grabarDOM(doc, rutaSalida);
@@ -495,6 +493,15 @@ public class Ejercicios {
 				}
 				break;
 			case 11:
+				
+				doc = ejer.eliminarPelicula("Blade Runner", doc);
+				
+				try {
+					ejer.grabarDOM(doc, rutaSalida);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| FileNotFoundException e) {
+					e.printStackTrace();
+				}
 				
 				break;
 			case 12:

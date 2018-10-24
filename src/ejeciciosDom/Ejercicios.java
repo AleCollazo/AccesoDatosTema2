@@ -155,37 +155,46 @@ public class Ejercicios {
 	
 	
 	
-	public boolean añadirAtributo(NodeList pelis, String titulo, String atributo, String valorAtrib) {
-		boolean modificado = false;
+	public Document añadirAtributo(String titulo, String atributo, String valorAtrib, Document doc) {
+		
+		NodeList hijosPelis;
 		
 		try {	
 			for(int i = 0; i < pelis.getLength(); i++) {
-				System.out.println(pelis.item(i).getFirstChild().getNodeValue()); //TODO Coger el título de los hijos
-				if(pelis.item(i).getFirstChild().getNodeValue().equals(titulo)) {
-					if(!((Element)pelis.item(i)).hasAttribute(atributo)) {
-						((Element)pelis.item(i)).setAttribute(atributo, valorAtrib);
-						modificado = true;
+				hijosPelis = pelis.item(i).getChildNodes();
+				for(int j = 0; j < hijosPelis.getLength(); j++) {
+					if(hijosPelis.item(j).getNodeName().equals("titulo")) {
+						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
+							if(!((Element)pelis.item(i)).hasAttribute(atributo)) {
+								((Element)pelis.item(i)).setAttribute(atributo, valorAtrib);
+								modificado = true;
+							}
+						}
 					}
 				}
 			}
-			return modificado;
 		} catch(DOMException e) {
 			System.err.println(e.getMessage());
-			return false;
 		}
-		
+		return doc;
 	}
 	
-	public boolean eliminarPelicula(NodeList pelis, String titulo, String atributo) {
+	public boolean eliminarPelicula(String titulo, String atributo, Document doc) {
 		boolean modificado = false;
+		
+		NodeList hijosPelis;
 		
 		try {
 			for(int i = 0; i < pelis.getLength(); i++) {
-				System.out.println(pelis.item(i).getFirstChild().getNodeValue());
-				if(pelis.item(i).getFirstChild().getNodeValue().equals(titulo)) {
-					if(((Element)pelis.item(i)).hasAttribute(atributo)) {
-						pelis.item(i).getParentNode().removeChild(pelis.item(i));
-						modificado = true;
+				hijosPelis = pelis.item(i).getChildNodes();
+				for(int j = 0; j < hijosPelis.getLength(); j++) {
+					if(hijosPelis.item(j).getNodeName().equals("titulo")) {
+						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
+							if(((Element)pelis.item(i)).hasAttribute(atributo)) {
+								pelis.item(i).getParentNode().removeChild(pelis.item(i));
+								modificado = true;
+							}
+						}
 					}
 				}
 			}
@@ -196,6 +205,29 @@ public class Ejercicios {
 		}
 	}
 	
+	public boolean eliminarPelicula(String titulo, Document doc) {
+		boolean modificado = false;
+		
+		NodeList hijosPelis;
+		
+		try {
+			for(int i = 0; i < pelis.getLength(); i++) {
+				hijosPelis = pelis.item(i).getChildNodes();
+				for(int j = 0; j < hijosPelis.getLength(); j++) {
+					if(hijosPelis.item(j).getNodeName().equals("titulo")) {
+						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
+							pelis.item(i).getParentNode().removeChild(pelis.item(i));
+							modificado = true;
+						}
+					}
+				}
+			}
+			return modificado;
+		} catch(DOMException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
+	}
 	
 	public boolean añadirPeli(Document doc, String titulo, String dirNombre, String dirApellido, String año, String genero, String idioma) {
 		try {
@@ -384,7 +416,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 12;
+		int ejercicio = 7;
 		
 		
 		switch(ejercicio) {
@@ -413,6 +445,13 @@ public class Ejercicios {
 			case 7:
 				System.out.println(ejer.añadirAtributo(pelis, "Dune", "Prueba", "Valor de prueba"));
 				System.out.println(ejer.eliminarPelicula(pelis, "Dune", "año"));
+				
+				try {
+					ejer.grabarDOM(doc, rutaSalida);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| FileNotFoundException e) {
+					e.printStackTrace();
+				}
 				break;
 			case 8:
 				ejer.añadirPeli(doc, "Depredador", "Jhon", "Tiernan", "1987", "acción", "en");
@@ -454,6 +493,9 @@ public class Ejercicios {
 						| FileNotFoundException e) {
 					e.printStackTrace();
 				}
+				break;
+			case 11:
+				
 				break;
 			case 12:
 				Document docuNuevo = ejer.crearArbol();

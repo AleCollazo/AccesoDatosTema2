@@ -286,6 +286,46 @@ public class Ejercicios {
 		return doc;
 	}
 	
+	public Document añadirDirector(String nomDirector, String apeDirector, String tituloPeli, Document doc) {
+		
+		NodeList pelis = doc.getElementsByTagName("pelicula");
+		NodeList hijos;
+		
+		for(int i = 0; i < pelis.getLength(); i++) {
+			hijos = pelis.item(i).getChildNodes();
+			for(int j = 0; j < hijos.getLength(); j++) {
+				if(hijos.item(j).getNodeName().equals("titulo")) {
+					if(hijos.item(j).getFirstChild().getNodeValue().equals(tituloPeli)) {
+						Node pelicula = pelis.item(i);
+						
+						Node director = doc.createElement("director");
+						
+						Node nomNodo = doc.createElement("nombre");
+						Node apeNodo = doc.createElement("apellido");
+						
+						Node txtNom = doc.createTextNode(nomDirector);
+						Node txtApe = doc.createTextNode(apeDirector);
+						
+						director.appendChild(nomNodo);
+						director.appendChild(apeNodo);
+						
+						nomNodo.appendChild(txtNom);
+						apeNodo.appendChild(txtApe);
+						
+						pelicula.appendChild(director);
+						
+						return doc;
+					}
+
+				}
+			}
+		}
+		
+
+		
+		return doc;
+	}
+	
 	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
@@ -297,7 +337,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 9;
+		int ejercicio = 10;
 		
 		
 		switch(ejercicio) {
@@ -353,6 +393,20 @@ public class Ejercicios {
 					e.printStackTrace();
 				}
 				
+				break;
+			case 10:
+				String nomDirector = "Alfredo";
+				String apeDirector = "Landa";
+				String tituloPeli = "Dune";
+				
+				doc = ejer.añadirDirector(nomDirector, apeDirector, tituloPeli, doc);
+				
+				try {
+					ejer.grabarDOM(doc, rutaSalida);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| FileNotFoundException e) {
+					e.printStackTrace();
+				}
 				break;
 		}
 	}

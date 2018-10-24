@@ -244,6 +244,49 @@ public class Ejercicios {
 	}
 	
 	
+	public Document cambiarNombreDirector(String nombre, String apellido, String nombreNuevo, Document doc) {
+		NodeList directores = doc.getElementsByTagName("director");
+		
+		boolean flagNom = false;
+		boolean flagApe = false;
+		
+		for(int i = 0; i < directores.getLength(); i++) {
+			NodeList hijos = directores.item(i).getChildNodes();
+			for(int j = 0; j < hijos.getLength(); j++) {
+				if(hijos.item(j).getNodeName().equals("nombre")) {
+					//System.out.println("Nombre: "+hijos.item(j).getFirstChild().getNodeValue());
+					if(hijos.item(j).getFirstChild().getNodeValue().equals(nombre)) {
+						flagNom = true;
+					}
+					else flagNom = false;
+				}
+				if(hijos.item(j).getNodeName().equals("apellido")) {
+					//System.out.println("Apellido: "+hijos.item(j).getFirstChild().getNodeValue());
+					if(hijos.item(j).getFirstChild().getNodeValue().equals(apellido)) {
+						flagApe = true;
+					}
+					else flagApe = false;
+				}
+				
+				
+				//System.out.printf("FlagNom: %b - FlagApe: %b\n %b\n\n",flagNom, flagApe, flagNom && flagApe);
+				if(flagNom && flagApe) {
+					NodeList nodeListNombres = ((Element) directores.item(i)).getElementsByTagName("nombre");
+					
+					//System.out.println(nodeListNombres.getLength());
+					
+					nodeListNombres.item(0).replaceChild(doc.createTextNode(nombreNuevo),nodeListNombres.item(0).getFirstChild());
+					//System.out.println("Se sustituyó");
+				}
+				
+			}
+			flagNom = false; flagApe = false;
+		}
+		
+		return doc;
+	}
+	
+	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
 		
@@ -300,50 +343,13 @@ public class Ejercicios {
 				String apellido = "Wachowski";
 				String nombreNuevo = "Lana";
 				
-				boolean flagNom = false;
-				boolean flagApe = false;
+				doc = ejer.cambiarNombreDirector(nombre, apellido, nombreNuevo, doc);
 				
-				NodeList directores = doc.getElementsByTagName("director");
-				
-				for(int i = 0; i < directores.getLength(); i++) {
-					NodeList hijos = directores.item(i).getChildNodes();
-					for(int j = 0; j < hijos.getLength(); j++) {
-						if(hijos.item(j).getNodeName().equals("nombre")) {
-							System.out.println("Nombre: "+hijos.item(j).getFirstChild().getNodeValue());
-							if(hijos.item(j).getFirstChild().getNodeValue().equals(nombre)) {
-								flagNom = true;
-							}
-							else flagNom = false;
-						}
-						else flagNom = false;
-						if(hijos.item(j).getNodeName().equals("apellido")) {
-							System.out.println("Nombre: "+hijos.item(j).getFirstChild().getNodeValue());
-							if(hijos.item(j).getFirstChild().getNodeValue().equals(apellido)) {
-								flagApe = true;
-							}
-							else flagApe = false;
-						}
-						else flagApe = false;
-						
-						
-						System.out.printf("FlagNom: %b - FlagApe: %b\n %b\n\n",flagNom, flagApe, flagNom && flagApe);
-						if(flagNom && flagApe) {
-							NodeList nodeListNombres = ((Element) directores.item(i)).getElementsByTagName("nombre");
-							
-							System.out.println(nodeListNombres.getLength());
-							
-							nodeListNombres.item(0).replaceChild(doc.createTextNode(nombreNuevo),nodeListNombres.item(0).getFirstChild());
-							System.out.println("Se sustituyó");
-						}
-						
-					}
-				}
 				
 				try {
 					ejer.grabarDOM(doc, rutaSalida);
 				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 						| FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				

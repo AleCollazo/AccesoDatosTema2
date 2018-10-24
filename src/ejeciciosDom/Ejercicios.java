@@ -33,6 +33,19 @@ public class Ejercicios {
 		return doc;
 	}
 	
+	public Document crearArbol() {
+		Document doc = null;
+		try {
+			DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
+			factoria.setIgnoringComments(false);
+			DocumentBuilder builder = factoria.newDocumentBuilder();
+			doc = builder.newDocument();
+		} catch(Exception e) {
+			System.out.println("Error generando el árbol DOM: "+e.getMessage());
+		}
+		return doc;
+	}
+	
 	public void mostrarTitulos(NodeList pelis) {
 		NodeList hijos;
 		
@@ -326,18 +339,52 @@ public class Ejercicios {
 		return doc;
 	}
 	
+	public Document nuevoDocument(Document doc) {
+		Node compañia = doc.createElement("compañia");
+		
+		Node empleado = doc.createElement("empleado");
+		((Element) empleado).setAttribute("id", "1");
+		
+		Node nombre = doc.createElement("nombre");
+		Node apellidos = doc.createElement("apellidos");
+		Node apodo = doc.createElement("apodo");
+		Node salario = doc.createElement("salario");
+		
+		Node txtNombre = doc.createTextNode("Juan");
+		Node txtApellidos = doc.createTextNode("López Pérez");
+		Node txtApodo = doc.createTextNode("Juanín");
+		Node txtSalario = doc.createTextNode("1000");
+		
+		nombre.appendChild(txtNombre);
+		apellidos.appendChild(txtApellidos);
+		apodo.appendChild(txtApodo);
+		salario.appendChild(txtSalario);
+		
+		empleado.appendChild(nombre);
+		empleado.appendChild(apellidos);
+		empleado.appendChild(apodo);
+		empleado.appendChild(salario);
+		
+		compañia.appendChild(empleado);
+		
+		doc.appendChild(compañia);
+		
+		return doc;
+	}
+	
 	
 	public static void main(String[] args) {
 		Ejercicios ejer = new Ejercicios();
 		
 		String ruta = System.getProperty("user.home")+"\\Documents\\peliculas.xml";
 		String rutaSalida = System.getProperty("user.home")+"\\Documents\\peliculasSalida.xml";
+		String rutaNuevo = System.getProperty("user.home")+"\\Documents\\docuNuevo.xml";
 		
 		Document doc = ejer.crearArbol(ruta);
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 10;
+		int ejercicio = 12;
 		
 		
 		switch(ejercicio) {
@@ -403,6 +450,17 @@ public class Ejercicios {
 				
 				try {
 					ejer.grabarDOM(doc, rutaSalida);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				break;
+			case 12:
+				Document docuNuevo = ejer.crearArbol();
+				
+				
+				try {
+					ejer.grabarDOM(ejer.nuevoDocument(docuNuevo), rutaNuevo);
 				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 						| FileNotFoundException e) {
 					e.printStackTrace();

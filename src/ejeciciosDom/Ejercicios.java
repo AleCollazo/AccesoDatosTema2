@@ -137,7 +137,6 @@ public class Ejercicios {
 	public ArrayList<String> contarGeneros(NodeList pelis) {
 		NamedNodeMap attribs;
 		ArrayList<String> generos = new ArrayList<>();
-		boolean existe;
 		
 		for(int i = 0; i < pelis.getLength(); i++) {
 			attribs = pelis.item(i).getAttributes();

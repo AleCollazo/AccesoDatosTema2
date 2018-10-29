@@ -13,7 +13,7 @@ public class Ejercicios {
 	public void getSax(String entradaXML) throws ParserConfigurationException, SAXException, IOException{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser parser = factory.newSAXParser();
-		ParserSAX parserSax = new ParserSAX();
+		ParserSAX4 parserSax = new ParserSAX4();
 		parser.parse(entradaXML, parserSax);
 	}
 	

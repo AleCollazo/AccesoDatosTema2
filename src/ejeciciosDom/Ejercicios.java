@@ -178,7 +178,7 @@ public class Ejercicios {
 		return doc;
 	}
 	
-	public Document eliminarPelicula(String titulo, String atributo, Document doc) {
+	public Document eliminarAtributo(String titulo, String atributo, Document doc) {
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
 		NodeList hijosPelis;
@@ -190,7 +190,7 @@ public class Ejercicios {
 					if(hijosPelis.item(j).getNodeName().equals("titulo")) {
 						if(hijosPelis.item(j).getFirstChild().getNodeValue().equals(titulo)) {
 							if(((Element)pelis.item(i)).hasAttribute(atributo)) {
-								pelis.item(i).getParentNode().removeChild(pelis.item(i));
+								((Element)pelis.item(i)).removeAttribute(atributo);
 							}
 						}
 					}
@@ -413,7 +413,7 @@ public class Ejercicios {
 		
 		NodeList pelis = doc.getElementsByTagName("pelicula");
 		
-		int ejercicio = 11;
+		int ejercicio = 7;
 		
 		
 		switch(ejercicio) {
@@ -441,7 +441,7 @@ public class Ejercicios {
 				break;
 			case 7:
 				doc = ejer.añadirAtributo("Dune", "Prueba", "Valor de prueba", doc);
-				doc = ejer.eliminarPelicula("Alien", "año", doc);
+				doc = ejer.eliminarAtributo("Alien", "año", doc);
 				
 				try {
 					ejer.grabarDOM(doc, rutaSalida);
